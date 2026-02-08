@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Typing Speed Test</title>
+
+    <style>
+      :root {
+        --bg: #070a12;
+        --card: rgba(255, 255, 255, 0.06);
+        --border: rgba(255, 255, 255, 0.14);
+        --text: #ffffff;
+        --muted: rgba(255, 255, 255, 0.65);
+        --accent: #7c3aed;
+        --accent2: #22c55e;
+        --danger: #ef4444;
+        --warn: #f59e0b;
+        --shadow: 0 25px 90px rgba(0, 0, 0, 0.45);
+      }
+
+      body.light {
+        --bg: #f5f7ff;
+        --card: rgba(0, 0, 0, 0.06);
+        --border: rgba(0, 0, 0, 0.12);
+        --text: #0b1020;
+        --muted: rgba(0, 0, 0, 0.65);
+        --shadow: 0 25px 80px rgba(0, 0, 0, 0.12);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family:
+          system-ui,
+          -apple-system,
+          Segoe UI,
+          Roboto,
+          Arial,
+          sans-serif;
+      }
+
+      body {
+        min-height: 100vh;
+        background:
+          radial-gradient(
+            circle at top left,
+            rgba(124, 58, 237, 0.28),
+            transparent 60%
+          ),
+          radial-gradient(
+            circle at bottom right,
+            rgba(34, 197, 94, 0.22),
+            transparent 60%
+          ),
+          var(--bg);
+        color: var(--text);
+      }
+
+      header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        background: rgba(0, 0, 0, 0.35);
+      }
+      body.light header {
+        background: rgba(255, 255, 255, 0.75);
+      }
+
+      .nav {
+        max-width: 1150px;
+        margin: auto;
+        padding: 14px 18px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 14px;
+      }
+
+      .logo {
+        font-size: 20px;
+        font-weight: 1000;
+        letter-spacing: 0.3px;
+      }
+      .logo span {
+        color: var(--accent);
+      }
+
+      .nav-right {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .btn {
+        padding: 10px 14px;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: var(--card);
+        color: var(--text);
+        font-weight: 950;
+        cursor: pointer;
+        transition: 0.18s;
+        user-select: none;
+      }
+      .btn:hover {
+        transform: scale(1.05);
+        border-color: rgba(124, 58, 237, 0.6);
+      }
+
+      .btn.primary {
+        border: none;
+        background: linear-gradient(135deg, var(--accent), #4f46e5);
+      }
+
+      .btn.danger {
+        border: 1px solid rgba(239, 68, 68, 0.4);
+        background: rgba(239, 68, 68, 0.12);
+        color: #ffb5b5;
+      }
+
+      .container {
+        max-width: 1150px;
+        margin: auto;
+        padding: 28px 18px 80px;
+      }
+
+      .hero {
+        text-align: center;
+        padding: 10px 0 18px;
+      }
+
+      .hero h1 {
+        font-size: 46px;
+        font-weight: 1000;
+        line-height: 1.08;
+      }
+
+      .hero h1 span {
+        color: var(--accent);
+      }
+
+      .hero p {
+        margin-top: 12px;
+        font-size: 15px;
+        color: var(--muted);
+        font-weight: 900;
+        line-height: 1.6;
+        max-width: 800px;
+        margin-left: auto;
+        margin-right: auto;
+      }
+
+      .grid {
+        display: grid;
+        grid-template-columns: 1.4fr 0.9fr;
+        gap: 16px;
+        margin-top: 18px;
+      }
+
+      .card {
+        border-radius: 22px;
+        border: 1px solid var(--border);
+        background: var(--card);
+        padding: 16px;
+        box-shadow: var(--shadow);
+      }
+
+      .card h2 {
+        font-size: 18px;
+        font-weight: 1000;
+        margin-bottom: 12px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+        margin-top: 10px;
+      }
+
+      .stat {
+        padding: 12px;
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.03);
+      }
+      body.light .stat {
+        background: rgba(0, 0, 0, 0.03);
+      }
+
+      .stat p {
+        color: var(--muted);
+        font-size: 12px;
+        font-weight: 950;
+      }
+
+      .stat h3 {
+        margin-top: 4px;
+        font-size: 22px;
+        font-weight: 1000;
+      }
+
+      .typingBox {
+        padding: 14px;
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        background: rgba(0, 0, 0, 0.18);
+        min-height: 150px;
+        line-height: 1.8;
+        font-size: 18px;
+        font-weight: 900;
+        user-select: none;
+        word-break: break-word;
+      }
+      body.light .typingBox {
+        background: rgba(255, 255, 255, 0.45);
+      }
+
+      .typingBox span.correct {
+        color: var(--accent2);
+      }
+      .typingBox span.wrong {
+        color: var(--danger);
+        text-decoration: underline;
+      }
+      .typingBox span.active {
+        background: rgba(124, 58, 237, 0.25);
+        border-radius: 6px;
+        padding: 2px 2px;
+      }
+
+      textarea {
+        width: 100%;
+        margin-top: 12px;
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        padding: 14px;
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--text);
+        font-size: 16px;
+        font-weight: 950;
+        outline: none;
+        resize: none;
+        min-height: 90px;
+      }
+      body.light textarea {
+        background: rgba(0, 0, 0, 0.04);
+      }
+
+      textarea:focus {
+        border-color: rgba(124, 58, 237, 0.65);
+        box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18);
+      }
+
+      .controls {
+        margin-top: 12px;
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .select {
+        padding: 10px 14px;
+        border-radius: 14px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.03);
+        color: var(--text);
+        font-weight: 950;
+        outline: none;
+        cursor: pointer;
+      }
+      body.light .select {
+        background: rgba(0, 0, 0, 0.04);
+      }
+
+      .smallText {
+        font-size: 13px;
+        font-weight: 950;
+        color: var(--muted);
+        line-height: 1.6;
+      }
+
+      .leaderboard {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        margin-top: 12px;
+        max-height: 420px;
+        overflow: auto;
+        padding-right: 4px;
+      }
+
+      .row {
+        padding: 12px;
+        border-radius: 18px;
+        border: 1px solid var(--border);
+        background: rgba(255, 255, 255, 0.03);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+      body.light .row {
+        background: rgba(0, 0, 0, 0.03);
+      }
+
+      .row b {
+        font-weight: 1000;
+      }
+
+      .badge {
+        font-size: 12px;
+        padding: 6px 10px;
+        border-radius: 999px;
+        border: 1px solid var(--border);
+        font-weight: 1000;
+        background: rgba(255, 255, 255, 0.03);
+        white-space: nowrap;
+      }
+
+      .badge.green {
+        border-color: rgba(34, 197, 94, 0.5);
+        color: #86efac;
+      }
+      .badge.red {
+        border-color: rgba(239, 68, 68, 0.5);
+        color: #fecaca;
+      }
+      .badge.yellow {
+        border-color: rgba(245, 158, 11, 0.5);
+        color: #fde68a;
+      }
+
+      @media (max-width: 950px) {
+        .grid {
+          grid-template-columns: 1fr;
+        }
+        .hero h1 {
+          font-size: 38px;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header>
+      <div class="nav">
+        <div class="logo"><span>⚡</span> Typing Speed Test</div>
+
+        <div class="nav-right">
+          <button class="btn" onclick="toggleTheme()">🌙 Theme</button>
+          <button class="btn danger" onclick="clearHistory()">
+            🗑 Clear Scores
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="container">
+      <div class="hero">
+        <h1><span>Typing</span> Speed Test</h1>
+        <p>
+          Beautiful typing test with real-time WPM, accuracy, mistakes
+          highlight, timer modes, difficulty levels and score history
+          leaderboard.
+        </p>
+      </div>
+
+      <div class="grid">
+        <!-- LEFT -->
+        <div class="card">
+          <h2>⌨️ Test Area</h2>
+
+          <div class="typingBox" id="typingBox"></div>
+
+          <textarea
+            id="input"
+            placeholder="Start typing here... (Timer starts automatically)"
+            spellcheck="false"
+          ></textarea>
+
+          <div class="controls">
+            <div style="display: flex; gap: 10px; flex-wrap: wrap">
+              <select class="select" id="mode">
+                <option value="15">⏱ 15 sec</option>
+                <option value="30" selected>⏱ 30 sec</option>
+                <option value="60">⏱ 60 sec</option>
+                <option value="120">⏱ 120 sec</option>
+              </select>
+
+              <select class="select" id="difficulty">
+                <option value="easy" selected>😄 Easy</option>
+                <option value="medium">😎 Medium</option>
+                <option value="hard">🔥 Hard</option>
+              </select>
+            </div>
+
+            <div style="display: flex; gap: 10px; flex-wrap: wrap">
+              <button class="btn primary" onclick="restartTest()">
+                🔁 Restart
+              </button>
+            </div>
+          </div>
+
+          <div class="stats">
+            <div class="stat">
+              <p>⏳ Time Left</p>
+              <h3 id="timeLeft">30s</h3>
+            </div>
+            <div class="stat">
+              <p>⚡ WPM</p>
+              <h3 id="wpm">0</h3>
+            </div>
+            <div class="stat">
+              <p>🎯 Accuracy</p>
+              <h3 id="accuracy">100%</h3>
+            </div>
+            <div class="stat">
+              <p>❌ Mistakes</p>
+              <h3 id="mistakes">0</h3>
+            </div>
+          </div>
+        </div>
+
+        <!-- RIGHT -->
+        <div class="card">
+          <h2>🏆 Score Leaderboard</h2>
+          <p class="smallText">
+            Your past scores are saved in browser localStorage. Top scores stay
+            here.
+          </p>
+
+          <div class="leaderboard" id="leaderboard"></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const typingBox = document.getElementById("typingBox");
+      const input = document.getElementById("input");
+
+      const timeLeftEl = document.getElementById("timeLeft");
+      const wpmEl = document.getElementById("wpm");
+      const accuracyEl = document.getElementById("accuracy");
+      const mistakesEl = document.getElementById("mistakes");
+
+      const modeEl = document.getElementById("mode");
+      const difficultyEl = document.getElementById("difficulty");
+
+      const leaderboardEl = document.getElementById("leaderboard");
+
+      const paragraphs = {
+        easy: [
+          "Typing is a skill that improves with practice. Start slow and focus on accuracy first.",
+          "The quick brown fox jumps over the lazy dog. Practice daily to increase your speed.",
+          "Consistency is the secret. Ten minutes of typing every day is better than one hour once.",
+          "Stay calm and type with rhythm. Accuracy comes before speed.",
+        ],
+        medium: [
+          "Learning to type faster requires patience, rhythm, and confidence. Do not look at the keyboard too much.",
+          "JavaScript is powerful for web apps. Clean code and small projects make you a strong developer.",
+          "Discipline beats motivation. Work daily, build projects, and improve step by step.",
+          "Practice with focus. Speed grows naturally when mistakes reduce.",
+        ],
+        hard: [
+          "Success comes from doing the hard work when nobody is watching. Focus deeply, remove distractions, and execute your plan.",
+          "A strong developer understands debugging, performance, and clean architecture. Small improvements daily become massive growth.",
+          "Typing speed is not magic. It is repetition, accuracy, muscle memory, and consistent practice over time.",
+          "Build real projects, solve real problems, and you will become unstoppable.",
+        ],
+      };
+
+      let currentText = "";
+      let timeLeft = 30;
+      let timer = null;
+      let started = false;
+      let finished = false;
+
+      function toggleTheme() {
+        document.body.classList.toggle("light");
+      }
+
+      function pickText() {
+        const diff = difficultyEl.value;
+        const list = paragraphs[diff];
+        return list[Math.floor(Math.random() * list.length)];
+      }
+
+      function renderText(userTyped = "") {
+        typingBox.innerHTML = "";
+
+        let mistakes = 0;
+
+        for (let i = 0; i < currentText.length; i++) {
+          const span = document.createElement("span");
+          const char = currentText[i];
+          span.innerText = char;
+
+          if (i < userTyped.length) {
+            if (userTyped[i] === char) {
+              span.classList.add("correct");
+            } else {
+              span.classList.add("wrong");
+              mistakes++;
+            }
+          }
+
+          if (i === userTyped.length && !finished) {
+            span.classList.add("active");
+          }
+
+          typingBox.appendChild(span);
+        }
+
+        mistakesEl.innerText = mistakes;
+        updateStats();
+      }
+
+      function countCorrectChars(typed) {
+        let correct = 0;
+        for (let i = 0; i < typed.length; i++) {
+          if (typed[i] === currentText[i]) correct++;
+        }
+        return correct;
+      }
+
+      function updateStats() {
+        const typed = input.value;
+
+        const totalTyped = typed.length;
+        const correctChars = countCorrectChars(typed);
+        const mistakes = totalTyped - correctChars;
+
+        let accuracy =
+          totalTyped === 0
+            ? 100
+            : Math.max(0, Math.round((correctChars / totalTyped) * 100));
+
+        accuracyEl.innerText = accuracy + "%";
+
+        const timeSpent = (parseInt(modeEl.value) - timeLeft) / 60;
+        let words =
+          typed.trim().length > 0 ? typed.trim().split(/\s+/).length : 0;
+
+        let wpm = timeSpent > 0 ? Math.round(words / timeSpent) : 0;
+
+        if (!isFinite(wpm)) wpm = 0;
+
+        wpmEl.innerText = wpm;
+        mistakesEl.innerText = mistakes < 0 ? 0 : mistakes;
+      }
+
+      function startTimer() {
+        if (timer) return;
+
+        timer = setInterval(() => {
+          if (timeLeft <= 0) {
+            finishTest();
+            return;
+          }
+          timeLeft--;
+          timeLeftEl.innerText = timeLeft + "s";
+          updateStats();
+        }, 1000);
+      }
+
+      function finishTest() {
+        finished = true;
+        clearInterval(timer);
+        timer = null;
+
+        timeLeft = 0;
+        timeLeftEl.innerText = "0s";
+
+        input.disabled = true;
+
+        const typed = input.value;
+        const correctChars = countCorrectChars(typed);
+        const totalTyped = typed.length;
+
+        const mistakes = totalTyped - correctChars;
+        const accuracy =
+          totalTyped === 0
+            ? 0
+            : Math.max(0, Math.round((correctChars / totalTyped) * 100));
+
+        const timeSpent = parseInt(modeEl.value) / 60;
+        const words =
+          typed.trim().length > 0 ? typed.trim().split(/\s+/).length : 0;
+        const wpm = Math.round(words / timeSpent);
+
+        saveScore({
+          wpm: wpm < 0 ? 0 : wpm,
+          accuracy,
+          mistakes: mistakes < 0 ? 0 : mistakes,
+          mode: modeEl.value + "s",
+          difficulty: difficultyEl.value,
+          date: new Date().toLocaleString(),
+        });
+
+        renderLeaderboard();
+        typingBox.style.borderColor = "rgba(34,197,94,0.7)";
+      }
+
+      function restartTest() {
+        finished = false;
+        started = false;
+
+        clearInterval(timer);
+        timer = null;
+
+        timeLeft = parseInt(modeEl.value);
+        timeLeftEl.innerText = timeLeft + "s";
+
+        currentText = pickText();
+        input.value = "";
+        input.disabled = false;
+        input.focus();
+
+        typingBox.style.borderColor = "var(--border)";
+        renderText("");
+        updateStats();
+      }
+
+      function saveScore(score) {
+        const data = JSON.parse(localStorage.getItem("typing_scores") || "[]");
+        data.push(score);
+
+        data.sort((a, b) => b.wpm - a.wpm);
+
+        localStorage.setItem(
+          "typing_scores",
+          JSON.stringify(data.slice(0, 20)),
+        );
+      }
+
+      function renderLeaderboard() {
+        const data = JSON.parse(localStorage.getItem("typing_scores") || "[]");
+
+        leaderboardEl.innerHTML = "";
+
+        if (data.length === 0) {
+          leaderboardEl.innerHTML = `
+            <div class="row">
+              <div>
+                <b>No scores yet</b><br/>
+                <span style="color:var(--muted);font-weight:900;font-size:12px;">
+                  Start typing to generate leaderboard.
+                </span>
+              </div>
+              <span class="badge yellow">NEW</span>
+            </div>
+          `;
+          return;
+        }
+
+        data.forEach((s, index) => {
+          const badgeClass =
+            s.wpm >= 80 ? "green" : s.wpm >= 40 ? "yellow" : "red";
+
+          const div = document.createElement("div");
+          div.className = "row";
+
+          div.innerHTML = `
+            <div style="display:flex;flex-direction:column;gap:3px;">
+              <b>#${index + 1} • ${s.wpm} WPM</b>
+              <span style="color:var(--muted);font-size:12px;font-weight:950;">
+                🎯 ${s.accuracy}% | ❌ ${s.mistakes} | ⏱ ${s.mode} | ${s.difficulty.toUpperCase()}
+              </span>
+              <span style="color:var(--muted);font-size:11px;font-weight:900;">
+                ${s.date}
+              </span>
+            </div>
+            <span class="badge ${badgeClass}">${badgeClass.toUpperCase()}</span>
+          `;
+
+          leaderboardEl.appendChild(div);
+        });
+      }
+
+      function clearHistory() {
+        if (confirm("Clear leaderboard history?")) {
+          localStorage.removeItem("typing_scores");
+          renderLeaderboard();
+        }
+      }
+
+      input.addEventListener("input", () => {
+        if (finished) return;
+
+        if (!started) {
+          started = true;
+          startTimer();
+        }
+
+        renderText(input.value);
+
+        if (input.value.length >= currentText.length) {
+          finishTest();
+        }
+      });
+
+      modeEl.addEventListener("change", restartTest);
+      difficultyEl.addEventListener("change", restartTest);
+
+      // INIT
+      currentText = pickText();
+      timeLeft = parseInt(modeEl.value);
+      timeLeftEl.innerText = timeLeft + "s";
+      renderText("");
+      renderLeaderboard();
+    </script>
+  </body>
+</html>
